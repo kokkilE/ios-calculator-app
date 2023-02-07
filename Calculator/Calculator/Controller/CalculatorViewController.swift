@@ -10,9 +10,9 @@ final class CalculatorViewController: UIViewController {
     private var expression: String = DefaultValue.zero
     private var isOperateComplited = false
     
-    @IBOutlet weak var scrollView: UIStackView!
-    @IBOutlet weak var operatorUILabel: UILabel!
-    @IBOutlet weak var operandUILabel: UILabel!
+    @IBOutlet private weak var scrollView: UIStackView!
+    @IBOutlet private weak var operatorUILabel: UILabel!
+    @IBOutlet private weak var operandUILabel: UILabel!
 
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -28,7 +28,7 @@ final class CalculatorViewController: UIViewController {
         expression = DefaultValue.empty
     }
 
-    @IBAction func touchUpCalculatorButton(sender: UIButton) {
+    @IBAction private func touchUpCalculatorButton(sender: UIButton) {
         guard let inputFromButton = sender.titleLabel?.text else {
             return
         }
@@ -159,15 +159,26 @@ final class CalculatorViewController: UIViewController {
         scrollView.addArrangedSubview(stackView)
     }
     
+//    private func scrollToBottomOfScrollView() {
+//        guard let parentScrollView = scrollView.superview as? UIScrollView,
+//              let subviewHeight = scrollView.subviews.first?.bounds.size.height else { return }
+//
+//        let bottomOffset = CGPoint(x: 0, y: parentScrollView.contentSize.height - parentScrollView.bounds.size.height + subviewHeight)
+//
+//        if (bottomOffset.y > subviewHeight) {
+//            parentScrollView.setContentOffset(bottomOffset, animated: true)
+//        }
+//    }
+    
     private func scrollToBottomOfScrollView() {
-        guard let parentScrollView = scrollView.superview as? UIScrollView,
-              let subviewHeight = scrollView.subviews.first?.bounds.size.height else { return }
+        guard let parentScrollView = scrollView.superview as? UIScrollView else { return }
         
-        let bottomOffset = CGPoint(x: 0, y: parentScrollView.contentSize.height - parentScrollView.bounds.size.height + subviewHeight)
+        parentScrollView.layoutIfNeeded()
         
-        if (bottomOffset.y > subviewHeight) {
-            parentScrollView.setContentOffset(bottomOffset, animated: true)
-        }
+        let bottomOffset = CGPoint(x: 0, y: parentScrollView.contentSize.height - parentScrollView.bounds.size.height)
+        
+        parentScrollView.setContentOffset(bottomOffset, animated: true)
+
     }
     
     private func stackInputToExpression() {
